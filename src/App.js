@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 
 function App() {
-  const [searchTerm, setSearchTerm] = React.useState("react");
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   const stories = [
     {
@@ -41,43 +41,38 @@ function App() {
   );
 }
 
-const List = (props) => {
+const List = ({ list }) => {
   return (
     <ul>
-      {props.list.map((item) => {
+      {list.map((item) => {
         return <Item key={item.objectID} item={item}></Item>;
       })}
     </ul>
   );
 };
 
-const Item = (props) => {
+const Item = ({ item: { title, url, author, num_comments, points } }) => {
   return (
     <li>
       <span>
         {" "}
-        <a href={props.item.url}>{props.item.title}</a>
+        <a href={url}>{title}</a>
       </span>
-      <span>{props.item.author}</span>
-      <span>{props.item.num_comments}</span>
-      <span>{props.item.points}</span>
+      <span>{author}</span>
+      <span>{num_comments}</span>
+      <span>{points}</span>
     </li>
   );
 };
 
-const Search = (props) => {
+const Search = ({ search, onSearch }) => {
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input
-        id="search"
-        type="text"
-        value={props.search}
-        onChange={props.onSearch}
-      ></input>
+      <input id="search" type="text" value={search} onChange={onSearch}></input>
 
       <p>
-        Searching for <strong>{props.search}</strong>
+        Searching for <strong>{search}</strong>
       </p>
     </div>
   );
