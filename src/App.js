@@ -46,7 +46,15 @@ function App() {
   return (
     <div>
       <h1>My Hacker Stories</h1>
-      <Search onSearch={handleSearch} search={searchTerm} />
+
+      <InputWithLabel
+        label="Search"
+        value={searchTerm}
+        onInputChange={handleSearch}
+      >
+        <strong>Search:</strong>
+      </InputWithLabel>
+
       <hr></hr>
       <List list={searchedStories} />
     </div>
@@ -81,16 +89,18 @@ const Item = ({ item: { title, url, author, num_comments, points } }) => {
 
 //Search component
 
-const Search = ({ search, onSearch }) => {
+const InputWithLabel = ({
+  id,
+  type = "text",
+  value,
+  onInputChange,
+  children,
+}) => {
   return (
-    <div>
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text" value={search} onChange={onSearch}></input>
-
-      <p>
-        Searching for <strong>{search}</strong>
-      </p>
-    </div>
+    <>
+      <label htmlFor={id}>{children}</label>
+      <input id={id} type={type} value={value} onChange={onInputChange}></input>
+    </>
   );
 };
 export default App;
