@@ -68,10 +68,10 @@ function App() {
     },
   ];
 
-  const getAsyncStories = () =>
-    new Promise((resolve) =>
-      setTimeout(() => resolve({ data: { stories: initialStories } }), 2000)
-    );
+  // const getAsyncStories = () =>
+  //   new Promise((resolve) =>
+  //     setTimeout(() => resolve({ data: { stories: initialStories } }), 2000)
+  //   );
 
   const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
 
@@ -81,7 +81,7 @@ function App() {
     isError: false,
   });
 
-  React.useEffect(() => {
+  const handleFetchStories = React.useCallback(() => {
     if (!searchTerm) return;
 
     dispatchStories({ type: "STORIES_FETCH_INIT" });
@@ -97,12 +97,16 @@ function App() {
       .catch(() => dispatchStories({ type: "STORIES_FETCH_FAILURE" }));
   }, [searchTerm]);
 
+  React.useEffect(() => {
+    handleFetchStories();
+  }, [handleFetchStories]);
+
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-  const searchedStories = stories.data.filter((story) =>
-    story.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const searchedStories = stories.data.filter((story) =>
+  //   story.title.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   const handleRemoveStory = (item) => {
     const newStories = stories.filter(
