@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import axios from "axios";
 
 const useSemiPersistentState = (key, initialState) => {
   const [value, setValue] = React.useState(
@@ -59,18 +60,19 @@ function App() {
     isError: false,
   });
 
-  const handleFetchStories = React.useCallback(() => {
+  const handleFetchStories = React.useCallback(async () => {
     dispatchStories({ type: "STORIES_FETCH_INIT" });
 
-    fetch(url)
-      .then((response) => response.json())
-      .then((result) => {
-        dispatchStories({
-          type: "STORIES_FETCH_SUCCESS",
-          payload: result.hits,
-        });
-      })
-      .catch(() => dispatchStories({ type: "STORIES_FETCH_FAILURE" }));
+    try {
+      const result = await axios.get(url);
+
+      dispatchStories({
+        type: "STORIES_FETCH_SUCCESS",
+        payload: result.data.hits,
+      });
+    } catch {
+      dispatchStories({ type: "STORIES_FETCH_FAILURE" });
+    }
   }, [url]);
 
   React.useEffect(() => {
